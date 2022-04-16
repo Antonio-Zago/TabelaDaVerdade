@@ -14,7 +14,7 @@ public class OperadorAnd {
 
     }
 
-    public List<Valores> resultado(){
+    public List<Valores> montaTabela(){
         List<Boolean> lista = new ArrayList<Boolean>(Arrays.asList(false,true));
         for (Boolean i:lista){
             for (Boolean x:lista){

@@ -1,8 +1,10 @@
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Painel {
     private String operacao;
+    private int tamanhoOperacao;
     private String operador;
     private String valor1;
     private String valor2;
@@ -10,29 +12,41 @@ public class Painel {
     Scanner ler = new Scanner(System.in);
 
 
-    public void exibir(){
+    public void exibirMenu(){
         System.out.println("---------------Tabela da Verdade---------------\n");
         System.out.println("Digite a operação: ");
-
-        this.ler();
     }
 
-    public void ler(){
-        this.setOperacao(ler.next());
+    public List<Valores> ler(){
+        List<Valores> valores = new ArrayList<Valores>();
 
-        this.setValor1(this.getOperacao().substring(0,1));
-        this.setOperador(this.getOperacao().substring(1,2));
-        this.setValor2(this.getOperacao().substring(2,3));
+        this.operacao = ler.next();
 
-        if(this.getOperador().equals("^")){
-            OperadorAnd and = new OperadorAnd(this.getValor1(), this.getValor2());
-            this.exibirResultado(and.resultado());
+
+        while(this.operacao.length()>1) {
+            this.valor1 = this.operacao.substring(0, 1);
+            this.operador = this.operacao.substring(1, 2);
+            this.valor2 = this.operacao.substring(2, 3);
+
+            System.out.println(this.operacao);
+            this.operacao = this.operacao.substring(2);
+
+            valores.addAll(this.selecionaOperacao());
+
         }
+        return valores;
+    }
 
-        if(this.getOperador().equals("v")){
-            OperadorOr or = new OperadorOr(this.getValor1(), this.getValor2());
-            this.exibirResultado(or.resultado());
+    private List<Valores> selecionaOperacao(){
+        if(this.operador.equals("^")){
+            OperadorAnd and = new OperadorAnd(this.valor1, this.valor2);
+            return and.montaTabela();
         }
+        else if(this.operador.equals("v")){
+            OperadorOr or = new OperadorOr(this.valor1, this.valor2);
+            return or.montaTabela();
+        }
+        else return null;
     }
 
     public void exibirResultado(List<Valores> listaValores){
